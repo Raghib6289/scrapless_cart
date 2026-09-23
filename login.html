@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login / Sign Up — Scrapless Cart</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Minimal Header -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="login.html" class="logo">
+        <span>Scrapless Cart</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Auth Main Area -->
+  <main class="auth-page">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h2 id="authHeading">Welcome Back</h2>
+        <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 4px;">
+          Sign in to access fresh groceries and special offers
+        </p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLoginBtn" type="button">Sign In</button>
+        <button class="auth-tab" id="tabSignupBtn" type="button">Create Account</button>
+      </div>
+
+      <!-- Feedback message box -->
+      <div class="auth-msg" id="authMsg"></div>
+
+      <!-- Sign In Form -->
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="loginEmail">Email Address</label>
+          <input type="email" id="loginEmail" class="form-input" placeholder="name@example.com" value="user@scrapless.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" class="form-input" placeholder="Password" value="password123" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 10px; margin-top: 8px;">
+          Sign In
+        </button>
+      </form>
+
+      <!-- Sign Up Form (hidden by default) -->
+      <form id="signupForm" style="display: none;">
+        <div class="form-group">
+          <label for="signupName">Full Name</label>
+          <input type="text" id="signupName" class="form-input" placeholder="Your Full Name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="signupEmail">Email Address</label>
+          <input type="email" id="signupEmail" class="form-input" placeholder="name@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="signupPassword">Password</label>
+          <input type="password" id="signupPassword" class="form-input" placeholder="At least 6 characters" minlength="6" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 10px; margin-top: 8px;">
+          Create Account
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Scrapless Cart. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="auth.js"></script>
+</body>
+</html>

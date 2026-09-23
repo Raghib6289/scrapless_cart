@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scrapless Cart — Smart & Fresh Grocery Store</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Ensure authentication at entry: redirect to login if no active user session -->
+  <script>
+    if (!localStorage.getItem('scrapless_user')) {
+      window.location.replace('login.html');
+    }
+  </script>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        <span>Scrapless Cart</span>
+      </a>
+
+      <!-- Search Input -->
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search basmati rice, toor dal, turmeric, ghee..." autocomplete="off">
+      </div>
+
+      <!-- User & Cart Actions -->
+      <div class="nav-actions">
+        <div id="authNavContainer">
+          <!-- Populated by app.js: User Profile or Sign In link -->
+        </div>
+
+        <button class="cart-btn" id="openCartBtn" aria-label="Open cart">
+          <span>Cart</span>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Hero Banner -->
+    <section class="hero">
+      <div class="hero-text">
+        <span class="hero-tag">Stop Food Waste & Save Up To 40%</span>
+        <h1>Fresh Indian Groceries at Smart Prices</h1>
+        <p>Premium unpolished dals, aged basmati rice, pure desi ghee, and handpicked spices delivered fresh.</p>
+      </div>
+    </section>
+
+    <!-- Controls (Categories & Sort) -->
+    <div class="controls-bar">
+      <div class="categories" id="categoryGroup">
+        <button class="cat-btn active" data-category="all">All Items</button>
+        <button class="cat-btn" data-category="Dal & Pulses">Dal & Pulses</button>
+        <button class="cat-btn" data-category="Rice & Atta">Rice & Atta</button>
+        <button class="cat-btn" data-category="Spices & Masalas">Spices & Masalas</button>
+        <button class="cat-btn" data-category="Dairy & Ghee">Dairy & Ghee</button>
+        <button class="cat-btn" data-category="Oils & Staples">Oils & Staples</button>
+      </div>
+
+      <div>
+        <select class="sort-select" id="sortSelect" aria-label="Sort products">
+          <option value="featured">Featured / Best Deals</option>
+          <option value="price-low">Price: Low to High</option>
+          <option value="price-high">Price: High to Low</option>
+          <option value="discount">Highest Discount</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Product Grid -->
+    <section class="product-grid" id="productGrid">
+      <!-- Product cards injected by app.js -->
+    </section>
+  </main>
+
+  <!-- Product Details Modal -->
+  <div class="modal-overlay" id="productModal">
+    <div class="modal-box">
+      <button class="modal-close" id="closeModalBtn" aria-label="Close">&times;</button>
+      <img id="modalImg" class="modal-img" src="" alt="Product">
+      <div class="modal-body">
+        <span class="card-category" id="modalCategory">Category</span>
+        <h2 class="card-title" id="modalTitle" style="font-size: 1.35rem; margin: 6px 0;">Product Title</h2>
+        <p id="modalDesc" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.75rem;"></p>
+
+        <div class="spec-box">
+          <div>
+            <strong>Unit: </strong><span id="modalUnit">1 Litre</span>
+          </div>
+          <div>
+            <strong>Expiry / Freshness: </strong><span id="modalExpiry" style="color: #b45309; font-weight: 700;">2026-09-26</span>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1rem;">
+          <div class="price-box">
+            <span class="current-price" id="modalPrice" style="font-size: 1.4rem;">₹0</span>
+            <span class="old-price" id="modalOldPrice" style="font-size: 1rem;">₹0</span>
+          </div>
+          <button class="btn btn-primary" id="modalAddToCartBtn">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Drawer -->
+  <div class="drawer-overlay" id="cartOverlay">
+    <aside class="drawer">
+      <div class="drawer-header">
+        <h3 style="font-size: 1.15rem;">Shopping Cart (<span id="drawerCartCount">0</span>)</h3>
+        <button class="close-btn" id="closeCartBtn" aria-label="Close cart">&times;</button>
+      </div>
+
+      <div class="drawer-items" id="cartItemsList">
+        <!-- Injected by app.js -->
+      </div>
+
+      <div class="drawer-footer" id="cartFooter">
+        <div class="summary-line">
+          <span>Subtotal</span>
+          <span id="cartSubtotal">₹0</span>
+        </div>
+        <div class="summary-line" style="color: var(--primary); font-weight: 600;">
+          <span>Savings</span>
+          <span id="cartSavings">- ₹0</span>
+        </div>
+        <div class="summary-line">
+          <span>Delivery</span>
+          <span id="cartDelivery">FREE</span>
+        </div>
+        <div class="summary-line summary-total">
+          <span>Total</span>
+          <span id="cartTotal">₹0</span>
+        </div>
+        <button class="btn btn-primary" id="checkoutBtn" style="width: 100%; justify-content: center; margin-top: 12px; padding: 10px;">
+          Proceed to Checkout
+        </button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Simple Toast Notification -->
+  <div class="toast" id="toast">Notification message</div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Scrapless Cart. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
