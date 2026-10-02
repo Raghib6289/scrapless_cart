@@ -1,7 +1,4 @@
-// =========================================================
-// Scrapless Cart - Authentication Script
-// Handles Registration and Login with users.json Data Storage
-// =========================================================
+// Authentication and session management
 
 document.addEventListener('DOMContentLoaded', () => {
   const tabLoginBtn = document.getElementById('tabLoginBtn');
@@ -11,7 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const authHeading = document.getElementById('authHeading');
   const authMsg = document.getElementById('authMsg');
 
-  // Check if user is already signed in
   const currentUser = JSON.parse(localStorage.getItem('scrapless_user') || 'null');
   if (currentUser) {
     showMessage(`You are currently signed in as ${currentUser.name}. Redirecting to store...`, 'success');
@@ -21,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  // Switch to Login tab
   tabLoginBtn.addEventListener('click', () => {
     tabLoginBtn.classList.add('active');
     tabSignupBtn.classList.remove('active');
@@ -31,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
     hideMessage();
   });
 
-  // Switch to Signup tab
   tabSignupBtn.addEventListener('click', () => {
     tabSignupBtn.classList.add('active');
     tabLoginBtn.classList.remove('active');
@@ -41,9 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     hideMessage();
   });
 
-  // =========================================================
-  // Handle Login Submit (Fetch from users.json)
-  // =========================================================
+  // Handle login form submission
   loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('loginEmail').value.trim();
@@ -55,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      // 1. Try server API that checks against users.json
       const res = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -68,7 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(data.error || 'Invalid email or password.');
       }
 
-      // Save active session
       localStorage.setItem('scrapless_user', JSON.stringify(data.user));
       showMessage(`Welcome back, ${data.user.name}! Redirecting...`, 'success');
 
@@ -77,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 700);
 
     } catch (err) {
-      // 2. Client-side fallback if opened directly without server
+      // Fallback for offline or local preview
       const localUsers = JSON.parse(localStorage.getItem('scrapless_users_json') || '[]');
       const defaultDemoUser = {
         name: 'Demo Shopper',
@@ -108,9 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // =========================================================
-  // Handle Sign Up Submit (Save to users.json structure)
-  // =========================================================
+  // Handle registration form submission
   signupForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const name = document.getElementById('signupName').value.trim();
@@ -128,7 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      // 1. Try server API to persist directly into users.json on disk
       const res = await fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -141,12 +128,10 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(data.error || 'Registration failed.');
       }
 
-      // Also keep client-side JSON mirror
       const localUsers = JSON.parse(localStorage.getItem('scrapless_users_json') || '[]');
       localUsers.push({ id: data.user.id, name, email, password });
       localStorage.setItem('scrapless_users_json', JSON.stringify(localUsers));
 
-      // Save active session
       localStorage.setItem('scrapless_user', JSON.stringify(data.user));
       showMessage(`Account registered! Welcome, ${data.user.name}. Redirecting...`, 'success');
 
@@ -155,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 700);
 
     } catch (err) {
-      // 2. Client-side fallback if running directly via file://
+      // Fallback for offline or local preview
       const localUsers = JSON.parse(localStorage.getItem('scrapless_users_json') || '[]');
       const exists = localUsers.some(u => u.email.toLowerCase() === email.toLowerCase());
 

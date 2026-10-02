@@ -1,7 +1,4 @@
-// =========================================================
-// Scrapless Cart - Lightweight Server
-// Built with pure Node.js (Zero npm dependencies needed)
-// =========================================================
+// HTTP server and authentication API
 
 const http = require('http');
 const fs = require('fs');
@@ -30,7 +27,6 @@ if (!fs.existsSync(USERS_FILE)) {
   );
 }
 
-// Helper to parse JSON request bodies
 function parseBody(req) {
   return new Promise((resolve, reject) => {
     let body = '';
@@ -46,7 +42,6 @@ function parseBody(req) {
   });
 }
 
-// Helper to send JSON responses
 function sendJSON(res, statusCode, data) {
   res.writeHead(statusCode, {
     'Content-Type': 'application/json',
@@ -70,7 +65,6 @@ const MIME_TYPES = {
 };
 
 const server = http.createServer(async (req, res) => {
-  // CORS Preflight
   if (req.method === 'OPTIONS') {
     res.writeHead(204, {
       'Access-Control-Allow-Origin': '*',
@@ -84,7 +78,7 @@ const server = http.createServer(async (req, res) => {
   const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
   const pathname = parsedUrl.pathname;
 
-  // API: Register User
+  // Register endpoint
   if (pathname === '/api/register' && req.method === 'POST') {
     try {
       const { name, email, password } = await parseBody(req);
@@ -130,7 +124,7 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // API: Login User
+  // Login endpoint
   if (pathname === '/api/login' && req.method === 'POST') {
     try {
       const { email, password } = await parseBody(req);
@@ -167,7 +161,7 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // API: Get Users (JSON structure)
+  // Users data endpoint
   if (pathname === '/api/users' && req.method === 'GET') {
     try {
       const rawUsers = fs.readFileSync(USERS_FILE, 'utf-8');
@@ -179,7 +173,7 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // Static File Serving
+  // Static file serving
   let filePath = path.join(__dirname, pathname === '/' ? 'index.html' : pathname);
 
   if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {

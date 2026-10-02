@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Scrapless Cart — Smart & Fresh Grocery Store</title>
   <link rel="stylesheet" href="style.css">
-  <!-- Ensure authentication at entry: redirect to login if no active user session -->
   <script>
     if (!localStorage.getItem('scrapless_user')) {
       window.location.replace('login.html');
@@ -13,24 +12,19 @@
   </script>
 </head>
 <body>
-  <!-- Navigation Bar -->
+
   <header class="navbar">
     <div class="container nav-container">
       <a href="index.html" class="logo">
         <span>Scrapless Cart</span>
       </a>
 
-      <!-- Search Input -->
       <div class="search-box">
         <input type="text" id="searchInput" placeholder="Search basmati rice, toor dal, turmeric, ghee..." autocomplete="off">
       </div>
 
-      <!-- User & Cart Actions -->
       <div class="nav-actions">
-        <div id="authNavContainer">
-          <!-- Populated by app.js: User Profile or Sign In link -->
-        </div>
-
+        <div id="authNavContainer"></div>
         <button class="cart-btn" id="openCartBtn" aria-label="Open cart">
           <span>Cart</span>
           <span class="cart-count" id="cartCount">0</span>
@@ -39,9 +33,7 @@
     </div>
   </header>
 
-  <!-- Main Content -->
   <main class="container">
-    <!-- Hero Banner -->
     <section class="hero">
       <div class="hero-text">
         <span class="hero-tag">Stop Food Waste & Save Up To 40%</span>
@@ -50,7 +42,6 @@
       </div>
     </section>
 
-    <!-- Controls (Categories & Sort) -->
     <div class="controls-bar">
       <div class="categories" id="categoryGroup">
         <button class="cat-btn active" data-category="all">All Items</button>
@@ -71,13 +62,10 @@
       </div>
     </div>
 
-    <!-- Product Grid -->
-    <section class="product-grid" id="productGrid">
-      <!-- Product cards injected by app.js -->
-    </section>
+    <section class="product-grid" id="productGrid"></section>
   </main>
 
-  <!-- Product Details Modal -->
+  <!-- Product modal -->
   <div class="modal-overlay" id="productModal">
     <div class="modal-box">
       <button class="modal-close" id="closeModalBtn" aria-label="Close">&times;</button>
@@ -107,7 +95,7 @@
     </div>
   </div>
 
-  <!-- Cart Drawer -->
+  <!-- Cart drawer -->
   <div class="drawer-overlay" id="cartOverlay">
     <aside class="drawer">
       <div class="drawer-header">
@@ -115,9 +103,7 @@
         <button class="close-btn" id="closeCartBtn" aria-label="Close cart">&times;</button>
       </div>
 
-      <div class="drawer-items" id="cartItemsList">
-        <!-- Injected by app.js -->
-      </div>
+      <div class="drawer-items" id="cartItemsList"></div>
 
       <div class="drawer-footer" id="cartFooter">
         <div class="summary-line">
@@ -143,10 +129,8 @@
     </aside>
   </div>
 
-  <!-- Simple Toast Notification -->
   <div class="toast" id="toast">Notification message</div>
 
-  <!-- Footer -->
   <footer>
     <div class="container">
       <p>&copy; 2026 Scrapless Cart. All rights reserved.</p>

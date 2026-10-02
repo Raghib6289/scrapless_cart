@@ -1,15 +1,12 @@
-// =========================================================
-// Scrapless Cart - Core App Script
-// Pure Vanilla JavaScript (No Frameworks, No Build Step)
-// =========================================================
+// Core storefront and cart logic
 
-// Ensure authentication check
+// Redirect to login if unauthenticated
 const activeUser = JSON.parse(localStorage.getItem('scrapless_user') || 'null');
 if (!activeUser && !window.location.pathname.endsWith('login.html')) {
   window.location.replace('login.html');
 }
 
-// Product Data Store - Indian Staples & Groceries
+// Product catalog
 const PRODUCTS = [
   {
     id: 1,
@@ -157,21 +154,18 @@ const PRODUCTS = [
   }
 ];
 
-// App State
 let cart = JSON.parse(localStorage.getItem('scrapless_cart') || '[]');
 let activeCategory = 'all';
 let searchQuery = '';
 let activeSort = 'featured';
 let selectedProductForModal = null;
 
-// DOM Elements
 const productGrid = document.getElementById('productGrid');
 const searchInput = document.getElementById('searchInput');
 const categoryGroup = document.getElementById('categoryGroup');
 const sortSelect = document.getElementById('sortSelect');
 const authNavContainer = document.getElementById('authNavContainer');
 
-// Cart DOM
 const openCartBtn = document.getElementById('openCartBtn');
 const closeCartBtn = document.getElementById('closeCartBtn');
 const cartOverlay = document.getElementById('cartOverlay');
@@ -184,7 +178,6 @@ const cartDelivery = document.getElementById('cartDelivery');
 const cartTotal = document.getElementById('cartTotal');
 const checkoutBtn = document.getElementById('checkoutBtn');
 
-// Modal DOM
 const productModal = document.getElementById('productModal');
 const closeModalBtn = document.getElementById('closeModalBtn');
 const modalImg = document.getElementById('modalImg');
@@ -197,22 +190,18 @@ const modalPrice = document.getElementById('modalPrice');
 const modalOldPrice = document.getElementById('modalOldPrice');
 const modalAddToCartBtn = document.getElementById('modalAddToCartBtn');
 
-// Toast
 const toast = document.getElementById('toast');
 
-// Initialize Application
 document.addEventListener('DOMContentLoaded', () => {
   renderAuthHeader();
   renderProducts();
   updateCartUI();
 
-  // Search input event
   searchInput.addEventListener('input', (e) => {
     searchQuery = e.target.value.toLowerCase().trim();
     renderProducts();
   });
 
-  // Category filter clicks
   categoryGroup.addEventListener('click', (e) => {
     const btn = e.target.closest('.cat-btn');
     if (!btn) return;
@@ -223,13 +212,11 @@ document.addEventListener('DOMContentLoaded', () => {
     renderProducts();
   });
 
-  // Sort dropdown
   sortSelect.addEventListener('change', (e) => {
     activeSort = e.target.value;
     renderProducts();
   });
 
-  // Cart Drawer open/close
   openCartBtn.addEventListener('click', () => {
     cartOverlay.classList.add('active');
   });
@@ -244,7 +231,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Modal close
   closeModalBtn.addEventListener('click', () => {
     productModal.classList.remove('active');
   });
@@ -262,7 +248,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Checkout handler
   checkoutBtn.addEventListener('click', () => {
     if (cart.length === 0) {
       showToast('Your cart is empty.');
@@ -286,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Render user status in navigation bar
+// Update authentication status in navigation
 function renderAuthHeader() {
   const user = JSON.parse(localStorage.getItem('scrapless_user') || 'null');
   if (user) {
@@ -307,16 +292,14 @@ function renderAuthHeader() {
   }
 }
 
-// Filter and Sort Products
+// Filter and sort product list
 function getFilteredProducts() {
   let list = [...PRODUCTS];
 
-  // Category filter
   if (activeCategory !== 'all') {
     list = list.filter(p => p.category.toLowerCase() === activeCategory.toLowerCase());
   }
 
-  // Search filter
   if (searchQuery) {
     list = list.filter(p =>
       p.name.toLowerCase().includes(searchQuery) ||
@@ -325,7 +308,6 @@ function getFilteredProducts() {
     );
   }
 
-  // Sorting
   switch (activeSort) {
     case 'price-low':
       list.sort((a, b) => a.discountPrice - b.discountPrice);
@@ -348,7 +330,7 @@ function getFilteredProducts() {
   return list;
 }
 
-// Render Products Grid
+// Render product cards
 function renderProducts() {
   const list = getFilteredProducts();
 
@@ -391,7 +373,7 @@ function renderProducts() {
   }).join('');
 }
 
-// Open Product Details Modal
+// Display product details modal
 window.openProductModal = function(productId) {
   const product = PRODUCTS.find(p => p.id === productId);
   if (!product) return;
@@ -409,7 +391,7 @@ window.openProductModal = function(productId) {
   productModal.classList.add('active');
 };
 
-// Cart Operations
+// Cart management
 window.addToCart = function(productId) {
   const product = PRODUCTS.find(p => p.id === productId);
   if (!product) return;
@@ -488,7 +470,6 @@ function updateCartUI() {
     return;
   }
 
-  // Calculate totals
   const subtotal = cart.reduce((acc, i) => acc + (i.discountPrice * i.qty), 0);
   const regularTotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
   const savings = regularTotal - subtotal;
@@ -517,7 +498,7 @@ function updateCartUI() {
   `).join('');
 }
 
-// Toast helper
+// Toast notification helper
 function showToast(msg) {
   toast.textContent = msg;
   toast.classList.add('show');
@@ -526,7 +507,7 @@ function showToast(msg) {
   }, 2400);
 }
 
-// XSS safety
+// HTML escape helper
 function escapeHtml(str) {
   if (!str) return '';
   return str.replace(/[&<>"']/g, (match) => {
